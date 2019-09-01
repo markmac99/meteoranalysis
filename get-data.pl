@@ -36,8 +36,10 @@ sub mungerow {
 sub doafile {
     my $dir=$_[0];
     my $doneone=$_[2];
+	my $cam = $_[3];
+#	print("$cam\n");
     my $ofname="$outdir/$_[1].csv";
-    my @files=glob($dir . '/*TCA.XML');
+    my @files=glob($dir . '/*' . $cam . 'A.XML');
     foreach (@files) {
 	my $want=0;
 	my $filename = $_;
@@ -46,7 +48,7 @@ sub doafile {
 	my $frow="";
 	my $fh2;
 	my $objno=1;
-	
+	print("$filename\n");
 	open(my $fh, '<:encoding(UTF-8)', $filename)
 	or die "Could not open file '$filename' $!";
 	while (my $row = <$fh>) {
@@ -95,8 +97,9 @@ sub doafile {
 sub dotxtfile {
     my $dir=$_[0];
     my $doneone=$_[2];
+	my $cam=$_[3];
     my $ofname="$outdir/$_[1]_av.csv";
-    my @files=glob($dir . '/*TC.txt');
+    my @files=glob($dir . '/*' . $cam . '.txt');
     foreach (@files) {
 	my $want=0;
 	my $filename = $_;
@@ -157,8 +160,10 @@ sub dotxtfile {
 my $min=0; my $mon=0; my $year=0;
 
 my $yyyymm='201712';
+my $cam="TC";
 if($#ARGV>=0){
    $yyyymm=$ARGV[0];
+   $cam=$ARGV[1];
 } 
 
 $year=substr($yyyymm, 0,4);
@@ -169,15 +174,16 @@ my $doneone=0;
 my $dd=1;
 for ($dd=1; $dd< 32 ; $dd++){
    my $ds=sprintf("%02d", $dd);
-   my $dir=$bdir . "/$year/$year$mon/$year$mon$ds";
-   my $ofn=sprintf("%04d%02d", $year, $mon);
-   $doneone=doafile($dir, $ofn, $doneone);
+   my $dir=$bdir . "/". $cam . "/$year/$year$mon/$year$mon$ds";
+   my $ofn=sprintf("%2s/%04d%02d", $cam, $year, $mon);
+   print("Processing $dir\n");
+   $doneone=doafile($dir, $ofn, $doneone, $cam);
 }
 $dd=1;
 $doneone=0;
 for ($dd=1; $dd< 32 ; $dd++){
    my $ds=sprintf("%02d", $dd);
    my $dir=$bdir . "/$year/$year$mon/$year$mon$ds";
-   my $ofn=sprintf("%04d%02d", $year, $mon);
-   $doneone=dotxtfile($dir, $ofn, $doneone);
+   my $ofn=sprintf("%2s/%04d%02d", $cam, $year, $mon);
+   $doneone=dotxtfile($dir, $ofn, $doneone, $cam);
 }
