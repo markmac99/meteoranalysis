@@ -1,4 +1,5 @@
 # powershell script to load UFOCAP csv files into MySQL
+
 $camname=$args[0]
 if ($args.count -lt 3)
 { 
@@ -12,6 +13,8 @@ else
 }
 $mm=([string]$mm1).padleft(2,'0')
 
+$logf= -join("..\logs\loadmysql-$camname-", (get-date -uformat "%Y%m%d-%H%M%S"),".log")
+
 [void][reflection.assembly]::LoadFrom("C:\Users\mark\Documents\WindowsPowerShell\Modules\Renci.SshNet.dll")
 Connect-MySqlServer  -Credential $dbcred -ComputerName 'thelinux' -database meteors
 
@@ -23,6 +26,7 @@ $columns="Ver,Shower,csvLocalTime,Mag,Dur_sec,AV_deg_s,Loc_Cam,TZ,YY,MM,DD,HH,MI
 $fn = get-childitem "*$yy$mm*$camname.csv" -recurse -name -path "c:\users\mark\videos\astro\meteorcam\$camname"
 if ($fn)
 {
+    Write-Output "Uploading camera $camname for $yy $mm" > $logf
     $fn2 = "c:\users\mark\videos\astro\meteorcam\$camname\$fn"
     # clear the current month from the table
     $query="delete from ufocsvimport where yy=$yy and mm=$mm and loc_cam='TACKLEY_$camname'"
@@ -46,14 +50,14 @@ if ($fn)
                 $($record.vooerr),$($record.tmerr),$($record.sps),$($record.sN),$($record.drop)`
                 );"
 
-        "about to insert a value for :$($record.localtime)"
+                Write-Output "about to insert a value for :$($record.localtime)" >>$logf
         
         Invoke-MySqlQuery -Query $query
         start-sleep -Milliseconds 150
     }
-    Invoke-MySqlQuery -Query "select count(shower) from ufocsvimport where YY=$yy and MM=$mm" 
+    Invoke-MySqlQuery -Query "select count(shower) from ufocsvimport where YY=$yy and MM=$mm" >> $logf
 }
 else {
-    "File not found for camera $camname for $YY $MM"
+    Write-Output "File not found for camera $camname for $YY $MM" >> $logf
 }
 Disconnect-MySqlServer
