@@ -1,5 +1,5 @@
 # powershell script to load UFOCAP csv files into MySQL
-$yy1=$args[0]
+$yy=$args[0]
 $mm1=$args[1]
 $mm=([string]$mm1).padleft(2,'0')
 $camname=$args[2]
