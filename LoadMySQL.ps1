@@ -1,8 +1,16 @@
 # powershell script to load UFOCAP csv files into MySQL
-$yy=$args[0]
-$mm1=$args[1]
+$camname=$args[0]
+if ($args.count -lt 3)
+{ 
+    $yy = get-date -format "yyyy"
+    $mm1 = get-date -format "MM"
+}
+else
+{
+    $yy=$args[1]
+    $mm1=$args[2]
+}
 $mm=([string]$mm1).padleft(2,'0')
-$camname=$args[2]
 
 [void][reflection.assembly]::LoadFrom("C:\Users\mark\Documents\WindowsPowerShell\Modules\Renci.SshNet.dll")
 Connect-MySqlServer  -Credential $dbcred -ComputerName 'thelinux' -database meteors
@@ -46,6 +54,6 @@ if ($fn)
     Invoke-MySqlQuery -Query "select count(shower) from ufocsvimport where YY=$yy and MM=$mm" 
 }
 else {
-    "File not found for camera $camname for$YY$MM"
+    "File not found for camera $camname for $YY $MM"
 }
 Disconnect-MySqlServer
