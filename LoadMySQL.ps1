@@ -16,6 +16,12 @@ $mm=([string]$mm1).padleft(2,'0')
 $logf= -join("..\logs\loadmysql-$camname-", (get-date -uformat "%Y%m%d-%H%M%S"),".log")
 
 [void][reflection.assembly]::LoadFrom("C:\Users\mark\Documents\WindowsPowerShell\Modules\Renci.SshNet.dll")
+
+$username = "meteor_rw"
+$password = "Wombat33met"
+$secureStringPwd = $password | ConvertTo-SecureString -AsPlainText -Force 
+$dbcred = New-Object System.Management.Automation.PSCredential -ArgumentList $username, $secureStringPwd
+
 Connect-MySqlServer  -Credential $dbcred -ComputerName 'thelinux' -database meteors
 
 #Define our column headings (needed for the Insert statement)
