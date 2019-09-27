@@ -35,7 +35,7 @@ echo "copying data for $tod"
 robocopy \\astromini\\data\meteorcam2\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+:$logf
 if ($tod -ne $ytd) {
     echo "copying data for $yyd"
-    robocopy \\astro2\\data\meteorcam2\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+:$logf
+    robocopy \\astromini\\data\meteorcam2\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+:$logf
 }
 net use \\astromini\data /d
 echo "finished" (get-date) 
