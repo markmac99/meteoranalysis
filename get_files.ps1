@@ -25,26 +25,20 @@ $exists= test-path $ytd
 if ($exists -eq $false) {
     mkdir $ytd
 }
-net use \\astro2\meteorcamdata /user:meteorcam Wombat33mc
+net use \\astro2\data /user:meteorcam Wombat33mc
 if ($? -ne "True")  {
     Send-MailMessage -from astro2@observatory -to mark@localhost -subject "Astro2: Unable co connect" -body "unable to connect to astro2" -smtpserver 192.168.1.151    
     Add-Content $logf "net-use failed`n"
     exit 2
 } 
 echo "copying TC data for $tod" 
-robocopy \\astro2\meteorcamdata\tc\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /tee /v /s /r:3 /log+:$logf
+robocopy \\astro2\data\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /tee /v /s /r:3 /log+:$logf
 if ($tod -ne $ytd) {
     echo "copying TC data for $yyd"
-    robocopy \\astro2\meteorcamdata\tc\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+: $logf
+    robocopy \\astro2\data\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+: $logf
 }
-cd ..\NE
-echo "copying NE data for $tod" 
-robocopy \\astro2\meteorcamdata\ne\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /tee /v /s /r:3 /log+:$logf
-if ($tod -ne $ytd) {
-    echo "copying NE data for $yyd"
-    robocopy \\astro2\meteorcamdata\ne\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+: $logf
-}
-net use \\astro2\meteorcamdata /d
+net use \\astro2\data /d
 echo "finished" (get-date) 
 Get-ChildItem –Path  "..\Logs" –Recurse -include *.log | Where-Object { $_.CreationTime –lt (Get-Date).AddDays(-30) } | Remove-Item
+cd C:\Users\Mark\Videos\Astro\MeteorCam\scripts
 exit 0

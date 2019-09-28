@@ -3,16 +3,19 @@
 
 #set up the location to work in
 Import-Module PowerShell-SMS
-set-nexmo -apikey 4d144f82 -APISecret 8VeP6VAatWHHD9tp
+$key = (get-storedcredential -target Nexmo).UserName
+$pass = (get-storedcredential -target Nexmo).GetNetworkCredential().Password
+set-nexmo -apikey $key -APISecret $pass
 $phoneno='+447581483115'
-$caploc="C:\users\mark\videos\astro\MeteorCam\"
+
+$caploc=(get-content $env:userprofile"\appdata\local\ukmonlivewatcher.ini")[1]
 $logf= $caploc+"brightobjs.log"
 if((test-path $logf) -eq $false)
 {
     new-item -path $logf
 }
 $camname=$args[0]
-$basedir=$caploc+$camname
+$basedir=$caploc
 
 if ($args.Count -lt 1)
 {
@@ -54,9 +57,9 @@ else {
                 $msg = "Possible interesting event " + $fn
                 write-output $msg
                 send-sms -to $phoneno -from $phoneno $msg -provider Nexmo
-            } else {
-                write-output '.'
-            }
+            } 
+        }else {
+            write-output '.'
         }
     }
 }

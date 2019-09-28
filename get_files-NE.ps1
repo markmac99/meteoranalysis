@@ -38,5 +38,6 @@ if ($tod -ne $ytd) {
     robocopy \\astromini\\data\meteorcam2\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+:$logf
 }
 net use \\astromini\data /d
+cd C:\Users\Mark\Videos\Astro\MeteorCam\scripts
 echo "finished" (get-date) 
 exit 0
