@@ -32,10 +32,10 @@ if ($? -ne "True")  {
     exit 2
 } 
 echo "copying TC data for $tod" 
-robocopy \\astro2\data\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /tee /v /s /r:3 /log+:$logf
+robocopy \\astro2\data\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /mov /tee /v /s /r:3 /log+:$logf
 if ($tod -ne $ytd) {
     echo "copying TC data for $yyd"
-    robocopy \\astro2\data\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+: $logf
+    robocopy \\astro2\data\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /mov /v /s /r:3 /log+: $logf
 }
 net use \\astro2\data /d
 echo "finished" (get-date) 

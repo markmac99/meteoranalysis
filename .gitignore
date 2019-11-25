@@ -1,3 +1,7 @@
 *.exe
 old/
 nexmo-key.txt
+*.ini
+*.jpg
+*.config
+*.USR

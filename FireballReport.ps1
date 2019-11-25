@@ -46,11 +46,13 @@ if ($dd -gt 0) {$msg ='Checking '+$camname+' for '+ $meteorid}
 write-output $msg
 if($dd -eq 0 ) {
     $targ=$basedir+'\'+$yyyy+'\'+$mm+'\*A.xml'
+    write-output $targ
     $fb4 = (get-childitem -r $targ | select-string 'mag="-4').path | get-unique
     $fb5 = (get-childitem -r $targ | select-string 'mag="-5').path | get-unique
     $fb6 = (get-childitem -r $targ | select-string 'mag="-6').path | get-unique
     $fb7 = (get-childitem -r $targ | select-string 'mag="-7').path | get-unique
     $fblist = ([array]$fb4+$fb5+$fb6+$fb7) | get-unique
+    Write-Output $fblist
 } else {
     $targ=$basedir+'\'+$yyyy+'\'+$mm+'\'+$dd+'\'+$meteorid+'*A.xml'
     $fblist = (get-childitem -r $targ ).fullname  
