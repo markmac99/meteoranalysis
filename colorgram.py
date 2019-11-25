@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import date
 import csv
+import os
 
 def heatmap(data, row_labels, col_labels, ax=None,
             cbar_kw={}, cbarlabel="", **kwargs):
@@ -127,7 +128,7 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
  # 
  # start of main function
  #   
-targpath = 'c:/spectrum/rmob/'
+targpath = 'c:\\spectrum\\rmob\\'
 srcpath='C:/Users/mark/Videos/astro/MeteorCam/radio/'
 maxdy=0 
 myarray= np.zeros((24,31), dtype=int)
@@ -210,3 +211,7 @@ plt.imshow(img2)
 fname3 = targpath + 'RMOB_'+str(yyyy)+str(dy)+'.jpg'
 plt.savefig(fname3, dpi=300,bbox_inches='tight')
 plt.close()
+
+os.system('net use \\\\markslaptop\\spectrum /user:radiometeor Radiometeor3')
+os.system('copy %s \\\\markslaptop\\spectrum\\rmob\\RMOB_latest.jpg' % (fname3))
+os.system('net use \\\\markslaptop\\spectrum /d')

@@ -19,9 +19,9 @@ scp -o StrictHostKeyChecking=no -i c:\users\radiometeor\documents\keys\markskey.
 
 add-content -path tmp\runtime.log -value 'copying colorgramme file'
 $mmyyyy=((get-date).tostring("MMyyyy"))
-$fnam='C:\Program Files (x86)\Colorgramme Lab\img\McIntyre_'+ $mmyyyy +'.jpg'
+$fnam='C:\Spectrum\rmob\RMOB_latest.jpg'
 copy-item $fnam -destination .\tmp
-$fnam='McIntyre_'+ $mmyyyy +'.jpg'
+$fnam='RMOB_latest.jpg'
 scp -o StrictHostKeyChecking=no -i c:\users\radiometeor\documents\keys\markskey.pem tmp\$fnam ec2-user@ec2-18-130-54-182.eu-west-2.compute.amazonaws.com:/var/www/html/markmcintyreastro/meteors/radio/ 
 
 add-content -path tmp\runtime.log -value 'executing the script'
