@@ -215,3 +215,13 @@ plt.close()
 os.system('net use \\\\markslaptop\\spectrum /user:radiometeor Radiometeor3')
 os.system('copy %s \\\\markslaptop\\spectrum\\rmob\\RMOB_latest.jpg' % (fname3))
 os.system('net use \\\\markslaptop\\spectrum /d')
+
+
+mthcnts=myarray.flatten()
+hrs=range(1,len(mthcnts)+1) 
+matplotlib.pyplot.bar(x=hrs,height=mthcnts) 
+plt.ylabel('Count')
+plt.tight_layout()
+fname4 = targpath + 'RMOB_'+str(yyyy)+'.jpg'
+plt.savefig(fname4, dpi=300,bbox_inches='tight')
+plt.close()

@@ -5,3 +5,6 @@ nexmo-key.txt
 *.jpg
 *.config
 *.USR
+*.exe
+*.pem
+

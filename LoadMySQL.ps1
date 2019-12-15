@@ -5,6 +5,7 @@ if ($args.count -lt 3)
 { 
     $yy = get-date -format "yyyy"
     $mm1 = get-date -format "MM"
+    $mm=$mm-1
 }
 else
 {
