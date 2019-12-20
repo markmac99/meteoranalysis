@@ -3,16 +3,20 @@
 Write-Output "starting" (get-date) 
 c:
 set-location C:\Users\Mark\Videos\Astro\MeteorCam\UK0006
-ping -n 1 rpicamera
-if ($? -ne "True")  {
-    start-sleep 30
+
+$loopctr=0
+ping -n 1 picamera
+while (($? -ne "True") -and ($loopctr -lt 10))  {
+    Sleep 30
     ping -n 1 rpicamera
-    if ($? -ne "True")  {
-        Send-MailMessage -from rpicamera@oservatory -to mark@localhost -subject "rpi camera down" -body "rpi camera seems to be down, check power and network" -smtpserver 192.168.1.151    
-        Write-Output "The Pi seems to be down, check power and network" > $logf
-        exit 1
-    }
-} 
+    $loopctr++
+}
+if ($loopctr -eq 10)  {
+    Send-MailMessage -from rpicamera@oservatory -to mark@localhost -subject "rpicamera down" -body "rpicamera seems to be down, check power and network" -smtpserver 192.168.1.151    
+    Write-Output "rpicamera seems to be down, check power and network" > $logf
+    exit 1
+}
+
 $pidown='c:\temp\pidown'
 $chk=test-connection -quiet 192.168.1.10
 if ($chk -ne "True")  

@@ -4,16 +4,18 @@ cd C:\Users\Mark\Videos\Astro\MeteorCam\ne
 $logf=  -join("..\logs\robocopy-ne-", (get-date -uformat "%Y%m%d-%H%M%S"),".log")
 echo "starting" (get-date) 
 
+$loopctr=0
 ping -n 1 astromini
-if ($? -ne "True")  {
+while (($? -ne "True") -and ($loopctr -lt 10))  {
     Sleep 30
     ping -n 1 astromini
-    if ($? -ne "True")  {
-        Send-MailMessage -from astromini@oservatory -to mark@localhost -subject "astromini down" -body "astromini seems to be down, check power and network" -smtpserver 192.168.1.151    
-        Write-Output "Astromini seems to be down, check power and network" > $logf
-        exit 1
-    }
-} 
+    $loopctr++
+}
+if ($loopctr -eq 10)  {
+    Send-MailMessage -from astromini@oservatory -to mark@localhost -subject "astromini down" -body "astromini seems to be down, check power and network" -smtpserver 192.168.1.151    
+    Write-Output "Astromini seems to be down, check power and network" > $logf
+    exit 1
+}
 
 set tod ((get-date).tostring("yyyy\\yyyyMM"))
 set ytd ((get-date).adddays(-1).tostring("yyyy\\yyyyMM"))

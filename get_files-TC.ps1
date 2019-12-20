@@ -4,16 +4,18 @@ cd C:\Users\Mark\Videos\Astro\MeteorCam\TC
 
 $logf=  -join("..\logs\robocopy-tc-", (get-date -uformat "%Y%m%d-%H%M%S"),".log")
 
+$loopctr=0
 ping -n 1 astro2
-if ($? -ne "True")  {
+while (($? -ne "True") -and ($loopctr -lt 10))  {
     Sleep 30
     ping -n 1 astro2
-    if ($? -ne "True")  {
-        Send-MailMessage -from astro2@oservatory -to mark@localhost -subject "astro2 down" -body "astro2 seems to be down, check power and network" -smtpserver 192.168.1.151    
-        Write-Output "Astro2 seems to be down, check power and network" > $logf
-        exit 1
-    }
-} 
+    $loopctr++
+}
+if ($loopctr -eq 10)  {
+    Send-MailMessage -from astro2@oservatory -to mark@localhost -subject "astro2 down" -body "astro2 seems to be down, check power and network" -smtpserver 192.168.1.151    
+    Write-Output "Astro2 seems to be down, check power and network" > $logf
+    exit 1
+}
 
 set tod ((get-date).tostring("yyyy\\yyyyMM"))
 set ytd ((get-date).adddays(-1).tostring("yyyy\\yyyyMM"))

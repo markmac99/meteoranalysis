@@ -5,7 +5,7 @@ if ($args.count -lt 3)
 { 
     $yy = get-date -format "yyyy"
     $mm1 = get-date -format "MM"
-    $mm=$mm-1
+    $mm1=$mm1-1
 }
 else
 {
@@ -17,6 +17,10 @@ $mm=([string]$mm1).padleft(2,'0')
 $logf= -join("..\logs\loadmysql-$camname-", (get-date -uformat "%Y%m%d-%H%M%S"),".log")
 
 [void][reflection.assembly]::LoadFrom("C:\Users\mark\Documents\WindowsPowerShell\Modules\Renci.SshNet.dll")
+
+if(!(get-command Connect-MySqlServer -errorAction SilentlyContinue)) { 
+    import-module C:\Users\mark\Documents\WindowsPowerShell\Modules\mysql
+}
 
 $username = "meteor_rw"
 $password = "Wombat33met"
