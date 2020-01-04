@@ -7,4 +7,5 @@ nexmo-key.txt
 *.USR
 *.exe
 *.pem
-
+push-to-ukmon-s3.ps1
+push-to-ukmon-s3.ps1.old
