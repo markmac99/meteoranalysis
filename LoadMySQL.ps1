@@ -38,7 +38,9 @@ $fn = get-childitem "*$yy$mm*$camname.csv" -recurse -name -path "c:\users\mark\v
 if ($fn)
 {
     Write-Output "Uploading camera $camname for $yy $mm" > $logf
+    # send to AWS S3
     $fn2 = "c:\users\mark\videos\astro\meteorcam\$camname\$fn"
+    aws s3 cp $fn2 s3://mjmm-meteor-uploads
     # clear the current month from the table
     $query="delete from ufocsvimport where yy=$yy and mm=$mm and loc_cam='TACKLEY_$camname'"
     Invoke-MySqlQuery -Query $query -Verbose
