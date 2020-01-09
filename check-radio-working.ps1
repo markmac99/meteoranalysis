@@ -11,7 +11,8 @@ while($true)
     write-output "checking..."
     if ((get-item $ftocheck).lastwritetime -lt  (get-date).addhours($offset)) 
     { 
-        if (![System.IO.File]::Exists($sdrdown))
+        $hrmin=(get-date -uformat %H%M)
+        if ((![System.IO.File]::Exists($sdrdown)) - and ($hrmin -gt 15))
         {
             $msg='radio meteor seems to have stopped'
             write-output $msg
