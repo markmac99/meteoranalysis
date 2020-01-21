@@ -27,7 +27,7 @@ $exists= test-path $ytd
 if ($exists -eq $false) {
     mkdir $ytd
 }
-net use \\astromini\data /user:astromini Wombat33
+net use \\astromini\data /user:astro Wombat33
 if ($? -ne "True")  {
     Send-MailMessage -from astromini@observatory -to mark@localhost -subject "Astromini: Unable co connect" -body "unable to connect to astromini" -smtpserver 192.168.1.151    
     Add-Content $logf "net-use failed`n"

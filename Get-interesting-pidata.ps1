@@ -27,4 +27,8 @@ foreach ($dname in $dlist)
     copy-item $src $pth
     $src=$srcpath +'ArchivedFiles\'+$dname +'\*.csv'
     copy-item $src $pth
+    $src=$srcpath +'ArchivedFiles\'+$dname +'\FF_UK0006_*.jpg'
+    copy-item $src $pth
+    $src=$srcpath +'ArchivedFiles\'+$dname +'\FF_UK0006_*.gif'
+    copy-item $src $pth
 }
