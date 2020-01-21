@@ -7,4 +7,4 @@ nexmo-key.txt
 *.USR
 *.exe
 *.pem
-ukmon-key.csv
+*.csv
