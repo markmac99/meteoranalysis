@@ -11,7 +11,7 @@ else
 }
 $mm=([string]$mm1).padleft(2,'0')
 
-$keyfile='c:\users\mark\videos\astro\meteorcam\scripts\ukmon-key.csv'
+$keyfile='C:\Users\mark\Documents\Projects\Certs\ukmon-key.csv'
 $keys=((Get-Content $keyfile)[1]).split(',')
 
 $Env:AWS_ACCESS_KEY_ID = $keys[0]

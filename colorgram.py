@@ -226,9 +226,9 @@ fname3 = targpath + 'RMOB_'+str(yyyy)+str(dy)+'.jpg'
 plt.savefig(fname3, dpi=300,bbox_inches='tight')
 plt.close()
 
-os.system('net use \\\\markslaptop\\spectrum /user:radiometeor Radiometeor3')
-os.system('copy %s \\\\markslaptop\\spectrum\\rmob\\RMOB_latest.jpg' % (fname3))
-os.system('net use \\\\markslaptop\\spectrum /d')
+os.system('net use \\\\radiometeor\\spectrum /user:meteor Wombat33rm')
+os.system('copy %s \\\\radiometeor\\spectrum\\rmob\\RMOB_latest.jpg' % (fname3))
+os.system('net use \\\\radiometeor\\spectrum /d')
 
 
 mthcnts=myarray.flatten()
