@@ -18,6 +18,7 @@ $Env:AWS_ACCESS_KEY_ID = $keys[0]
 $env:AWS_SECRET_ACCESS_KEY = $keys[1]
 
 $mthyr="$yy/$yy"+$mm+"/"
+Write-Output $mthyr
 
 $srcdir='c:/users/mark/videos/astro/MeteorCam/NE/'+$mthyr
 $destdir= 's3://ukmon-shared/archive/Tackley/c2/'+$mthyr

@@ -9,6 +9,6 @@ Function Get-Folder($initialDirectory) {
 }
 $myf = get-folder('C:\users\mark\Videos\astro\MeteorCam\UK0006\ArchivedFiles')
 
-cd c:\users\mark\documents\projects\RMS
+set-location c:\users\mark\documents\projects\RMS
 python -m RMS.Astrometry.SkyFit --config . $myf
 set-location $PSScriptRoot
