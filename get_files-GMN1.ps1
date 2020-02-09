@@ -7,7 +7,7 @@ set-location C:\Users\Mark\Videos\Astro\MeteorCam\UK0006
 $loopctr=0
 ping -n 1 meteorpi
 while (($? -ne "True") -and ($loopctr -lt 10))  {
-    Sleep 30
+    start-Sleep 30
     ping -n 1 meteorpi
     $loopctr++
 }
@@ -43,10 +43,12 @@ if ($? -ne "True")  {
     Add-Content $logf "net-use failed`n"
     exit 2
 } 
+write-output "updating ConfirmedFiles"
+ssh -o StrictHostKeyChecking=no -i C:\cygwin\home\mark\.ssh\pikey.pub pi@meteorpi ~/redoConfirmed.sh
+
 Write-Output "copying data" 
-
-
 robocopy \\meteorpi\rms_share\ArchivedFiles ArchivedFiles /dcopy:DAT /tee /v /s /r:3 /log+:$logf
+robocopy \\meteorpi\rms_share\ConfirmedFiles ConfirmedFiles /dcopy:DAT /tee /v /s /r:3 /log+:$logf
 
 net use \\meteorpi\RMS_share /d
 Write-Output "finished" (get-date) 
