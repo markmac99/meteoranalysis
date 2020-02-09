@@ -16,7 +16,7 @@ while($true)
     { 
         # need to handle midnight when the new file may not exist yet
         $hrmin=(get-date -uformat %H%M)
-        if ($hrmin -gt $offsmin)
+        if ([int]$hrmin -gt $offsmin)
         {
             $msg='radio meteor seems to have stopped at ' + $hrmin
             write-output $msg
