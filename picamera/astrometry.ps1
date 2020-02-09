@@ -7,7 +7,8 @@ Function Get-Folder($initialDirectory) {
     [void] $FolderBrowserDialog.ShowDialog()
     return $FolderBrowserDialog.SelectedPath
 }
-$myf = get-folder('C:\users\mark\Videos\astro\MeteorCam\UK0006\ArchivedFiles')
+#$myf = get-folder('C:\users\mark\Videos\astro\MeteorCam\UK0006\ArchivedFiles')
+$myf = get-folder('\\meteorpi\RMS_Share\ArchivedFiles')
 
 set-location c:\users\mark\documents\projects\RMS
 python -m RMS.Astrometry.SkyFit --config . $myf
