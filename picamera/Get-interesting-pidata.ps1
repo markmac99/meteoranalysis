@@ -2,7 +2,7 @@
 
 $srcpath='c:\users\mark\videos\astro\meteorcam\UK0006\'
 
-$arcpath=$srcpath + 'ArchivedFiles\'
+$arcpath=$srcpath + 'ConfirmedFiles\'
 $dlist = (get-childitem -directory $arcpath).Name
 foreach ($dname in $dlist)
 {
@@ -17,18 +17,20 @@ foreach ($dname in $dlist)
     $exists = test-path $pth
     if ($exists -ne $true) { mkdir $pth | Out-Null}
 
-    $src=$srcpath +'ArchivedFiles\'+$dname +'\*radiants.*'
+    $src=$srcpath +'ConfirmedFiles\'+$dname +'\*radiants.*'
     copy-item $src $pth
-    $src=$srcpath +'ArchivedFiles\'+$dname +'\*meteors.*'
+    $src=$srcpath +'ConfirmedFiles\'+$dname +'\*meteors.*'
     copy-item $src $pth
-    $src=$srcpath +'ArchivedFiles\'+$dname +'\*thumbs.jpg'
+    $src=$srcpath +'ConfirmedFiles\'+$dname +'\*thumbs.jpg'
     copy-item $src $pth
-    $src=$srcpath +'ArchivedFiles\'+$dname +'\FTP*.txt'
+    $src=$srcpath +'ConfirmedFiles\'+$dname +'\FTP*.txt'
     copy-item $src $pth
-    $src=$srcpath +'ArchivedFiles\'+$dname +'\*.csv'
+    $precs=$pth +'\FTP*pre-confirmation.txt'
+    remove-item $precs
+    $src=$srcpath +'ConfirmedFiles\'+$dname +'\*.csv'
     copy-item $src $pth
-    $src=$srcpath +'ArchivedFiles\'+$dname +'\FF_UK0006_*.jpg'
+    $src=$srcpath +'ConfirmedFiles\'+$dname +'\FF_UK0006_*.jpg'
     copy-item $src $pth
-    $src=$srcpath +'ArchivedFiles\'+$dname +'\FF_UK0006_*.gif'
+    $src=$srcpath +'ConfirmedFiles\'+$dname +'\FF_UK0006_*.gif'
     copy-item $src $pth
 }

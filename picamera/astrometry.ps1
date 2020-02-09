@@ -1,6 +1,6 @@
 # doing Pi Camera astrometry
 Function Get-Folder($initialDirectory) {
-    [void] [System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
+    [System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms') | out-null
     $FolderBrowserDialog = New-Object System.Windows.Forms.FolderBrowserDialog
     $FolderBrowserDialog.RootFolder = 'MyComputer'
     if ($initialDirectory) { $FolderBrowserDialog.SelectedPath = $initialDirectory }
