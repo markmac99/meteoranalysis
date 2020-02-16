@@ -8,3 +8,5 @@ nexmo-key.txt
 *.exe
 *.pem
 *.csv
+__pycache__/
+*.xlsx
