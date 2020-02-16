@@ -8,6 +8,7 @@ import calendar
 import csv
 import os
 import dateutil.relativedelta 
+from radio import ConvertToCsv
 
 def heatmap(data, row_labels, col_labels, ax=None,
             cbar_kw={}, cbarlabel="", **kwargs):
@@ -153,6 +154,7 @@ with open(srcpath +'RMOB-'+tod+'.DAT') as myfile:
     print(f'Processed {line_count} lines.')
 hrs=range(1,25)
 cnts=myarray[:,dy-1]
+dys="{:02d}".format(dy)
 
 fig, ax = plt.subplots()
 
@@ -203,12 +205,12 @@ comp="Computer:    HP Laptop"
 plt.title(
     f'{obs:<30}{loc1:<30}\n{cntr:<30}{loc2:<30}\n{city:<30}{freq:<30}\n'+
     f'{antn:<30}{azim:<30}\n{rfpr:<30}{recv:<30}\n{obsm:<60}\n{comp:<60}\n\n'+
-    'Tackley Meteor Station\nCount of detections per hour ' +str(yyyy) + '-'+str(dy), loc='left')
+    'Tackley Meteor Station\nCount of detections per hour ' +str(yyyy) + '-'+dys, loc='left')
 
 plt.tight_layout()
 #plt.show()
 
-fname2 = targpath + str(yyyy)+str(dy)+'.jpg'
+fname2 = targpath + str(yyyy)+dys+'.jpg'
 plt.savefig(fname2, dpi=300,bbox_inches='tight')
 plt.close()
 
@@ -222,7 +224,7 @@ plt.axis('off')
 plt.imshow(img2)
 #plt.show()
 
-fname3 = targpath + 'RMOB_'+str(yyyy)+str(dy)+'.jpg'
+fname3 = targpath + 'RMOB_'+str(yyyy)+dys+'.jpg'
 plt.savefig(fname3, dpi=300,bbox_inches='tight')
 plt.close()
 
@@ -327,7 +329,13 @@ plt.text=""
 plt.xlabel('Day of Month')
 plt.tight_layout()
 
-fname2 = targpath + str(yyyy)+str(dy)+'-3mths.jpg'
+fname2 = targpath + str(yyyy)+dys+'-3mths.jpg'
 plt.savefig(fname2, dpi=300,bbox_inches='tight')
 plt.close()
 
+yr=yyyy[0:4]
+mt=yyyy[4:6]
+print(yr)
+print(mt)
+print(dys)
+ConvertToCsv.doafile(yr,mt,dys)
