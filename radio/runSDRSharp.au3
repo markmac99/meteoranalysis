@@ -15,7 +15,7 @@ Run("C:\Program Files (x86)\SDRSharp\SDRSharp.exe")
 
 ; Wait for app to become active.
 WinWaitActive("SDR#")
-Sleep(500)
+Sleep(30000)
 ControlClick("SDR#","","[NAME:playStopButton]","left",1)
 
 ; Finished!
