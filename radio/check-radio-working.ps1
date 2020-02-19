@@ -24,6 +24,7 @@ while($true)
             Send-MailMessage -from radiometeor@rm -to mark@localhost -subject "Radio down" -body $msg -smtpserver 192.168.1.151    
             $id=(Get-Process SDRSharp).id
             stop-process $id
+            sleep(10)
             & scripts\runSDRSharp.exe
         }
     } 
