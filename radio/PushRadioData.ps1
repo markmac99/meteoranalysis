@@ -18,12 +18,12 @@ $targ= 'bitnami@'+$awssite+':data/meteors'
 scp -o StrictHostKeyChecking=no -i $key ..\latest2d.jpg $targ
 
 add-content -path tmp\runtime.log -value 'copying last capture'
-$fnam=(get-childitem  c:\spectrum\screenshots\*.jpg | sort-object lastwritetime).name | select-object -last 1
+$fnam=(get-childitem  c:\spectrum\screenshots\event*.jpg | sort-object lastwritetime).name | select-object -last 1
 copy-item $fnam  -destination latestcapture.jpg
 scp -o StrictHostKeyChecking=no -i $key latestcapture.jpg $targ
 
 add-content -path tmp\runtime.log -value 'copying colorgramme file'
-$mmyyyy=((get-date).tostring("MMyyyy"))
+#$mmyyyy=((get-date).tostring("MMyyyy"))
 copy-item 'C:\Spectrum\rmob\RMOB_latest.jpg' -destination .
 $fnam='RMOB_latest.jpg'
 scp -o StrictHostKeyChecking=no -i $key $fnam $targ
