@@ -1,32 +1,34 @@
-del c:\spectrum\screenshots\tmp\actions.log
+remove-item c:\spectrum\screenshots\tmp\actions.log
 $ErrorActionPreference="SilentlyContinue"
 Stop-Transcript | out-null
 $ErrorActionPreference = "Continue"
+$curloc = Get-Location
 
-cd c:\spectrum\screenshots
+set-location c:\spectrum\screenshots
 Start-Transcript -path tmp\actions.log -append
 #set-executionpolicy Unrestricted
 
-del tmp\runtime.log
+Remove-item tmp\runtime.log
 add-content -path tmp\runtime.log -value 'copying latest image'
 
-scp -o StrictHostKeyChecking=no -i c:\users\meteor\documents\keys\markskey.pem ..\latest2d.jpg ec2-user@ec2-18-130-54-182.eu-west-2.compute.amazonaws.com:/var/www/html/markmcintyreastro/meteors/radio 
+$awssite=get-content 'c:\spectrum\scripts\awssite.txt'
+
+$key='c:\users\meteor\documents\keys\markskey.pem'
+$targ= 'bitnami@'+$awssite+':data/meteors' 
+scp -o StrictHostKeyChecking=no -i $key ..\latest2d.jpg $targ
 
 add-content -path tmp\runtime.log -value 'copying last capture'
-$fnam=(ls  c:\spectrum\screenshots\*.jpg | sort-object lastwritetime).name | select-object -last 1
-copy-item $fnam  -destination .\tmp\latestcapture.jpg
-scp -o StrictHostKeyChecking=no -i c:\users\meteor\documents\keys\markskey.pem "$fnam" ec2-user@ec2-18-130-54-182.eu-west-2.compute.amazonaws.com:/var/www/html/markmcintyreastro/meteors/radio/latestcapture.jpg 
+$fnam=(get-childitem  c:\spectrum\screenshots\*.jpg | sort-object lastwritetime).name | select-object -last 1
+copy-item $fnam  -destination latestcapture.jpg
+scp -o StrictHostKeyChecking=no -i $key latestcapture.jpg $targ
 
 add-content -path tmp\runtime.log -value 'copying colorgramme file'
 $mmyyyy=((get-date).tostring("MMyyyy"))
-$fnam='C:\Spectrum\rmob\RMOB_latest.jpg'
-copy-item $fnam -destination .\tmp
+copy-item 'C:\Spectrum\rmob\RMOB_latest.jpg' -destination .
 $fnam='RMOB_latest.jpg'
-scp -o StrictHostKeyChecking=no -i c:\users\meteor\documents\keys\markskey.pem tmp\$fnam ec2-user@ec2-18-130-54-182.eu-west-2.compute.amazonaws.com:/var/www/html/markmcintyreastro/meteors/radio/ 
-
-add-content -path tmp\runtime.log -value 'executing the script'
-ssh -i c:\users\meteor\documents\keys\markskey.pem ec2-user@ec2-18-130-54-182.eu-west-2.compute.amazonaws.com /var/www/html/markmcintyreastro/meteors/getdata.sh 
+scp -o StrictHostKeyChecking=no -i $key $fnam $targ
 
 $msg=get-date
 add-content -path tmp\runtime.log -value $msg
+set-location $curloc
 stop-transcript 
