@@ -36,7 +36,7 @@ write-output 'Creating stacks'
 ssh -o StrictHostKeyChecking=no -i $key $usr data/meteors/update.sh
 
 write-output 'finding latest RMS stack'
-set-location 
+$targ= 'bitnami@'+$awssite+':data/meteors/' 
 $x=(get-childitem -r c:\users\mark\videos\astro\meteorcam\UK0006\ConfirmedFiles\*stack*.jpg).FullName
 copy-item $x[$x.count-1] c:\temp\UK0006_latest.jpg
 scp -o StrictHostKeyChecking=no -i $key c:\temp\UK0006_latest.jpg $targ

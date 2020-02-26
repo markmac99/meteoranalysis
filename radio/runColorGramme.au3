@@ -19,7 +19,8 @@ consolewrite($filename)
 
 ; Run app
 Run("C:\Program Files (x86)\Colorgramme Lab\colorlab.exe", "C:\Program Files (x86)\Colorgramme Lab\")
-
+; bring the window to the front
+Winactivate("Colorgramme")
 ; Wait for app to be active
 WinWaitActive("Colorgramme")
 
