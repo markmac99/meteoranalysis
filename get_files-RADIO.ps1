@@ -41,6 +41,22 @@ if((test-path $fname) -eq $false)
 }
 
 net use \\radiometeor\colorgramme /d
+
+# compress older files to save space
+$prvmth = (get-date).addmonths(-2) 
+$ccyymm=get-date($prvmth) -uformat('%Y%m')
+$yymm=get-date($prvmth) -uformat('%y%m')
+$srcs = 'event_log'+$ccyymm+'*.txt'
+$archfile = 'event_log'+$ccyymm+'.zip'
+get-childitem -path $srcs | compress-archive -destinationpath $archfile -Update
+remove-item $srcs
+Set-Location screenshots
+$srcs = 'event'+$yymm+'*.jpg'
+$archfile = 'event'+$ccyymm+'.zip'
+get-childitem -path $srcs | compress-archive -destinationpath $archfile -Update
+Remove-Item $srcs
+Set-Location ..
+
 set-location $PSScriptRoot
 write-output "done"
 
