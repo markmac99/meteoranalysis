@@ -6,7 +6,7 @@ import pandas as pd
 from datetime import date
 import calendar
 import csv
-import os
+import os, sys
 import dateutil.relativedelta 
 from radio import ConvertToCsv
 
@@ -128,214 +128,216 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
 
     return texts
 
- # 
- # start of main function
- #   
-targpath = 'c:\\spectrum\\rmob\\'
-srcpath='C:/Users/mark/Videos/astro/MeteorCam/radio/'
-maxdy=0 
-tod=date.today().strftime("%Y%m")
-mthdays=calendar.monthrange(date.today().year, date.today().month)[1]
 
-myarray= np.zeros((24,mthdays), dtype=int)
-with open(srcpath +'RMOB-'+tod+'.DAT') as myfile:
-    mydata = csv.reader(myfile, delimiter=',')
-    line_count=0
-    for row in mydata:
-        yr=row[0]
-        yyyy=yr[0:6]
-        dy = int(yr[6:8])
-        hr = int(row[1])
-        val  = int(row[2])
-        #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
-        myarray[hr,dy-1]=val
-        line_count += 1
-        maxdy=dy        
-    print(f'Processed {line_count} lines.')
-hrs=range(1,25)
-cnts=myarray[:,dy-1]
-dys="{:02d}".format(dy)
+def main() :
+    # 
+    # start of main function
+    #   
+    targpath = 'c:\\spectrum\\rmob\\'
+    srcpath='C:/Users/mark/Videos/astro/MeteorCam/radio/'
+    maxdy=0 
+    if len(sys.argv) > 1 :
+        tod = str(sys.argv[1])
+    else :
+        tod=date.today().strftime("%Y%m")
+    
+    mthdays=calendar.monthrange(int(tod[:4]), int(tod[5:6]))[1]
 
-fig, ax = plt.subplots()
+    myarray= np.zeros((24,mthdays), dtype=int)
+    with open(srcpath +'RMOB-'+tod+'.DAT') as myfile:
+        mydata = csv.reader(myfile, delimiter=',')
+        line_count=0
+        for row in mydata:
+            yr=row[0]
+            yyyy=yr[0:6]
+            dy = int(yr[6:8])
+            hr = int(row[1])
+            val  = int(row[2])
+            #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
+            myarray[hr,dy-1]=val
+            line_count += 1
+            maxdy=dy        
+        print(f'Processed {line_count} lines.')
+    hrs=range(1,25)
+    cnts=myarray[:,dy-1]
+    dys="{:02d}".format(dy)
 
-col_lbl=["0","","","3","","","6","","","9","","","12","","","15","","","18","","","21","",""]
-if mthdays == 31 :
-    row_lbl=["1","","","","5","","","","","10",
-        "","","","","15","","","","","20","","","","","25","","","","","30",""]
-elif mthdays == 30 :
-    row_lbl=["1","","","","5","","","","","10",
-        "","","","","15","","","","","20","","","","","25","","","","","30"]
-elif mthdays == 29 :
-    row_lbl=["1","","","","5","","","","","10",
-        "","","","","15","","","","","20","","","","","25","","","",""]
-else:
-    row_lbl=["1","","","","5","","","","","10",
-        "","","","","15","","","","","20","","","","","25","","",""]
+    fig, ax = plt.subplots()
 
-im, cbar = heatmap(myarray, col_lbl, row_lbl,
-                   cmap="jet", cbarlabel="Meteors/hour")
-texts = annotate_heatmap(im, valfmt=" {x:.0f} ", fontsize=8, threshold=myarray.max()*3/4)
-fig.tight_layout()
+    col_lbl=["0","","","3","","","6","","","9","","","12","","","15","","","18","","","21","",""]
+    if mthdays == 31 :
+        row_lbl=["1","","","","5","","","","","10",
+            "","","","","15","","","","","20","","","","","25","","","","","30",""]
+    elif mthdays == 30 :
+        row_lbl=["1","","","","5","","","","","10",
+            "","","","","15","","","","","20","","","","","25","","","","","30"]
+    elif mthdays == 29 :
+        row_lbl=["1","","","","5","","","","","10",
+            "","","","","15","","","","","20","","","","","25","","","",""]
+    else:
+        row_lbl=["1","","","","5","","","","","10",
+            "","","","","15","","","","","20","","","","","25","","",""]
 
-plt.ylabel('Hour', labelpad=-2)
-#plt.title('Heatmap for '+ str(yyyy), y=10)
-plt.text(0.5,1.1, 'Heatmap for '+ str(yyyy), horizontalalignment='center', transform=ax.transAxes, fontsize=15)
-plt.xlabel('Day of Month')
-plt.tight_layout()
+    im, cbar = heatmap(myarray, col_lbl, row_lbl,
+                    cmap="jet", cbarlabel="Meteors/hour")
+    texts = annotate_heatmap(im, valfmt=" {x:.0f} ", fontsize=8, threshold=myarray.max()*3/4)
+    fig.tight_layout()
 
-fname = targpath + str(yyyy)+'.jpg'
-plt.savefig(fname, dpi=300,bbox_inches='tight')
-plt.close()
+    plt.ylabel('Hour', labelpad=-2)
+    #plt.title('Heatmap for '+ str(yyyy), y=10)
+    plt.text(0.5,1.1, 'Heatmap for '+ str(yyyy), horizontalalignment='center', transform=ax.transAxes, fontsize=15)
+    plt.xlabel('Day of Month')
+    plt.tight_layout()
 
-#plt.subplot(1,2,1)
-matplotlib.pyplot.bar(x=hrs,height=cnts)
-plt.ylabel('Count')
-obs ="Observer:      Mark McIntyre"
-loc1="    Location:    001°3100 West "
-cntr="Country:        United Kingdom  "
-loc2="                    051°4900 North"
-city="City:              Oxford                 "
-freq=" Frequency: 143.05805"
-antn="Antenna:       3-element Yagi             "
-azim="     Az: 175° El: 3°               "
-rfpr="RF Preamp:   None             "
-recv="        Reciever:    RTL USB Dongle"
-obsm="Obs Method: Spectrum Lab"
-comp="Computer:    HP Laptop"
-plt.title(
-    f'{obs:<30}{loc1:<30}\n{cntr:<30}{loc2:<30}\n{city:<30}{freq:<30}\n'+
-    f'{antn:<30}{azim:<30}\n{rfpr:<30}{recv:<30}\n{obsm:<60}\n{comp:<60}\n\n'+
-    'Tackley Meteor Station\nCount of detections per hour ' +str(yyyy) + '-'+dys, loc='left')
+    fname = targpath + str(yyyy)+'.jpg'
+    plt.savefig(fname, dpi=300,bbox_inches='tight')
+    plt.close()
 
-plt.tight_layout()
-#plt.show()
+    #plt.subplot(1,2,1)
+    matplotlib.pyplot.bar(x=hrs,height=cnts)
+    plt.ylabel('Count')
+    obs ="Observer:      Mark McIntyre"
+    loc1="    Location:    001°3100 West "
+    cntr="Country:        United Kingdom  "
+    loc2="                    051°4900 North"
+    city="City:              Oxford                 "
+    freq=" Frequency: 143.05805"
+    antn="Antenna:       3-element Yagi             "
+    azim="     Az: 175° El: 3°               "
+    rfpr="RF Preamp:   None             "
+    recv="        Reciever:    RTL USB Dongle"
+    obsm="Obs Method: Spectrum Lab"
+    comp="Computer:    HP Laptop"
+    plt.title(
+        f'{obs:<30}{loc1:<30}\n{cntr:<30}{loc2:<30}\n{city:<30}{freq:<30}\n'+
+        f'{antn:<30}{azim:<30}\n{rfpr:<30}{recv:<30}\n{obsm:<60}\n{comp:<60}\n\n'+
+        'Tackley Meteor Station\nCount of detections per hour ' +str(yyyy) + '-'+dys, loc='left')
 
-fname2 = targpath + str(yyyy)+dys+'.jpg'
-plt.savefig(fname2, dpi=300,bbox_inches='tight')
-plt.close()
+    plt.tight_layout()
+    #plt.show()
 
-ax = plt.subplot(1, 2, 2)
-img1=plt.imread(fname)
-plt.axis('off')
-plt.imshow(img1)
-ax = plt.subplot(1, 2, 1)
-img2=plt.imread(fname2)
-plt.axis('off')
-plt.imshow(img2)
-#plt.show()
+    fname2 = targpath + str(yyyy)+dys+'.jpg'
+    plt.savefig(fname2, dpi=300,bbox_inches='tight')
+    plt.close()
 
-fname3 = targpath + 'RMOB_'+str(yyyy)+dys+'.jpg'
-plt.savefig(fname3, dpi=300,bbox_inches='tight')
-plt.close()
+    ax = plt.subplot(1, 2, 2)
+    img1=plt.imread(fname)
+    plt.axis('off')
+    plt.imshow(img1)
+    ax = plt.subplot(1, 2, 1)
+    img2=plt.imread(fname2)
+    plt.axis('off')
+    plt.imshow(img2)
+    #plt.show()
 
-os.system('net use \\\\radiometeor\\spectrum /user:meteor Wombat33rm')
-os.system('copy %s \\\\radiometeor\\spectrum\\rmob\\RMOB_latest.jpg' % (fname3))
-os.system('net use \\\\radiometeor\\spectrum /d')
+    fname3 = targpath + 'RMOB_'+str(yyyy)+dys+'.jpg'
+    plt.savefig(fname3, dpi=300,bbox_inches='tight')
+    plt.close()
 
-
-mthcnts=myarray.flatten()
-hrs=range(1,len(mthcnts)+1) 
-matplotlib.pyplot.bar(x=hrs,height=mthcnts) 
-plt.ylabel('Count')
-plt.tight_layout()
-fname4 = targpath + 'RMOB_'+str(yyyy)+'.jpg'
-plt.savefig(fname4, dpi=300,bbox_inches='tight')
-plt.close()
+    os.system('net use \\\\radiometeor\\spectrum /user:meteor Wombat33rm')
+    os.system('copy %s \\\\radiometeor\\spectrum\\rmob\\RMOB_latest.jpg' % (fname3))
+    os.system('net use \\\\radiometeor\\spectrum /d')
 
 
-maxdy=0 
-tod=date.today().strftime("%Y%m")
-mthdays=calendar.monthrange(date.today().year,date.today().month)[1]
-m1=mthdays
-d2 = date.today() - dateutil.relativedelta.relativedelta(months=1)
-m2 = calendar.monthrange(d2.year, d2.month)[1]
-mthdays = mthdays + m2
-d3 = date.today() - dateutil.relativedelta.relativedelta(months=2)
-m3 = calendar.monthrange(d3.year, d3.month)[1]
-mthdays = mthdays + m3
-myarray= np.zeros((24,mthdays), dtype=int)
+    mthcnts=myarray.flatten()
+    hrs=range(1,len(mthcnts)+1) 
+    matplotlib.pyplot.bar(x=hrs,height=mthcnts) 
+    plt.ylabel('Count')
+    plt.tight_layout()
+    fname4 = targpath + 'RMOB_'+str(yyyy)+'.jpg'
+    plt.savefig(fname4, dpi=300,bbox_inches='tight')
+    plt.close()
 
-with open(srcpath +'RMOB-'+d3.strftime("%Y%m")+'.DAT') as myfile:
-    mydata = csv.reader(myfile, delimiter=',')
-    line_count=0
-    for row in mydata:
-        yr=row[0]
-        yyyy=yr[0:6]
-        dy = int(yr[6:8])
-        hr = int(row[1])
-        val  = int(row[2])
-        #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
-        myarray[hr,dy-1]=val
-        line_count += 1
-        maxdy=dy        
-    print(f'Processed {line_count} lines.')
-with open(srcpath +'RMOB-'+d2.strftime("%Y%m")+'.DAT') as myfile:
-    mydata = csv.reader(myfile, delimiter=',')
-    line_count=0
-    for row in mydata:
-        yr=row[0]
-        yyyy=yr[0:6]
-        dy = int(yr[6:8])+m3
-        hr = int(row[1])
-        val  = int(row[2])
-        #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
-        myarray[hr,dy-1]=val
-        line_count += 1
-        maxdy=dy        
-    print(f'Processed {line_count} lines.')
 
-with open(srcpath +'RMOB-'+tod+'.DAT') as myfile:
-    mydata = csv.reader(myfile, delimiter=',')
-    line_count=0
-    for row in mydata:
-        yr=row[0]
-        yyyy=yr[0:6]
-        dy = int(yr[6:8])+m2+m3
-        hr = int(row[1])
-        val  = int(row[2])
-        #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
-        myarray[hr,dy-1]=val
-        line_count += 1
-        maxdy=dy        
-    print(f'Processed {line_count} lines.')
-hrs=range(1,25)
-cnts=myarray[:,dy-1]
+    maxdy=0 
+    tod=date.today().strftime("%Y%m")
+    mthdays=calendar.monthrange(date.today().year,date.today().month)[1]
+    m1=mthdays
+    d2 = date.today() - dateutil.relativedelta.relativedelta(months=1)
+    m2 = calendar.monthrange(d2.year, d2.month)[1]
+    mthdays = mthdays + m2
+    d3 = date.today() - dateutil.relativedelta.relativedelta(months=2)
+    m3 = calendar.monthrange(d3.year, d3.month)[1]
+    mthdays = mthdays + m3
+    myarray= np.zeros((24,mthdays), dtype=int)
 
-print (maxdy)
-fig, ax = plt.subplots()
+    with open(srcpath +'RMOB-'+d3.strftime("%Y%m")+'.DAT') as myfile:
+        mydata = csv.reader(myfile, delimiter=',')
+        line_count=0
+        for row in mydata:
+            yr=row[0]
+            yyyy=yr[0:6]
+            dy = int(yr[6:8])
+            hr = int(row[1])
+            val  = int(row[2])
+            #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
+            myarray[hr,dy-1]=val
+            line_count += 1
+            maxdy=dy        
+        print(f'Processed {line_count} lines.')
+    with open(srcpath +'RMOB-'+d2.strftime("%Y%m")+'.DAT') as myfile:
+        mydata = csv.reader(myfile, delimiter=',')
+        line_count=0
+        for row in mydata:
+            yr=row[0]
+            yyyy=yr[0:6]
+            dy = int(yr[6:8])+m3
+            hr = int(row[1])
+            val  = int(row[2])
+            #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
+            myarray[hr,dy-1]=val
+            line_count += 1
+            maxdy=dy        
+        print(f'Processed {line_count} lines.')
 
-row_lbl= ["" for x in range(mthdays)]
-print(m1,m2,m3)
-for i in range(mthdays):
-    if not i%10: 
-        if i >= (m3+m2):
-            print("2", i,i-m3-m2)
-            row_lbl[i] = str(i-m2-m3)
-        elif i >= m3:
-            print("1", i,i-m3)
-            row_lbl[i] = str(i-m3)
-        else:
-            print("0", i,m3)
-            row_lbl[i] = str(i)
+    with open(srcpath +'RMOB-'+tod+'.DAT') as myfile:
+        mydata = csv.reader(myfile, delimiter=',')
+        line_count=0
+        for row in mydata:
+            yr=row[0]
+            yyyy=yr[0:6]
+            dy = int(yr[6:8])+m2+m3
+            hr = int(row[1])
+            val  = int(row[2])
+            #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
+            myarray[hr,dy-1]=val
+            line_count += 1
+            maxdy=dy        
+        print(f'Processed {line_count} lines.')
+    hrs=range(1,25)
+    cnts=myarray[:,dy-1]
 
-im, cbar = heatmap(myarray, col_lbl, row_lbl,
-                   cmap="jet", cbarlabel="Meteors/hour")
-#texts = annotate_heatmap(im, valfmt=" {x:.0f} ", fontsize=8, threshold=myarray.max()*3/4)
-fig.tight_layout()
+    print (maxdy)
+    fig, ax = plt.subplots()
 
-plt.ylabel('Hour', labelpad=-2)
-plt.text=""
-#plt.text(0.5,1.1, '3-month Heatmap for '+ str(yyyy), horizontalalignment='center', transform=ax.transAxes, fontsize=15)
-plt.xlabel('Day of Month')
-plt.tight_layout()
+    row_lbl= ["" for x in range(mthdays)]
+    for i in range(mthdays):
+        if not i%10: 
+            if i >= (m3+m2):
+                row_lbl[i] = str(i-m2-m3)
+            elif i >= m3:
+                row_lbl[i] = str(i-m3)
+            else:
+                row_lbl[i] = str(i)
 
-fname2 = targpath + str(yyyy)+dys+'-3mths.jpg'
-plt.savefig(fname2, dpi=300,bbox_inches='tight')
-plt.close()
+    im, cbar = heatmap(myarray, col_lbl, row_lbl,
+                    cmap="jet", cbarlabel="Meteors/hour")
+    #texts = annotate_heatmap(im, valfmt=" {x:.0f} ", fontsize=8, threshold=myarray.max()*3/4)
+    fig.tight_layout()
 
-yr=yyyy[0:4]
-mt=yyyy[4:6]
-print(yr)
-print(mt)
-print(dys)
-ConvertToCsv.doafile(yr,mt,dys)
+    plt.ylabel('Hour', labelpad=-2)
+    plt.text=""
+    #plt.text(0.5,1.1, '3-month Heatmap for '+ str(yyyy), horizontalalignment='center', transform=ax.transAxes, fontsize=15)
+    plt.xlabel('Day of Month')
+    plt.tight_layout()
+
+    fname2 = targpath + str(yyyy)+dys+'-3mths.jpg'
+    plt.savefig(fname2, dpi=300,bbox_inches='tight')
+    plt.close()
+
+    yr=yyyy[0:4]
+    mt=yyyy[4:6]
+    ConvertToCsv.doafile(yr,mt,dys)
+
+if __name__ == '__main__':
+    main()
