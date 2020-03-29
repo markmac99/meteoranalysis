@@ -24,6 +24,15 @@ write-output 'Creating stack'
 ssh -o StrictHostKeyChecking=no -i $key $usr data/meteors/tmp/makestack.sh
 
 scp -o StrictHostKeyChecking=no -i $key $targ/stack.jpg .
-move stack.jpg ../stacks/$fnam.jpg
+move stack.jpg ../stacks/$fnam.jpg -Force
+
+& 'C:\Program Files (x86)\FastStone Image Viewer\fsviewer.exe' ../stacks/$fnam.jpg
+
+$del = read-host -Prompt 'Delete source files?'
+
+if ( $del -eq 'Y' -or $del -eq 'y' )
+{
+    rm *.jpg
+}
 
 set-location $curloc
