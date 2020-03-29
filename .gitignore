@@ -10,3 +10,5 @@ nexmo-key.txt
 *.csv
 __pycache__/
 *.xlsx
+getcsvsfromftp.sh
+radio/doit.ps1
