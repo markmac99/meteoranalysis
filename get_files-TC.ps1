@@ -1,5 +1,6 @@
 ﻿Write-Output "starting" (get-date) 
 c:
+$curdir=get-location
 Set-Location C:\Users\Mark\Videos\Astro\MeteorCam\TC
 
 $logf=  -join("..\logs\robocopy-tc-", (get-date -uformat "%Y%m%d-%H%M%S"),".log")
@@ -37,10 +38,10 @@ Write-Output "copying TC data for $tod"
 robocopy \\astro2\data\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /mov /tee /v /s /r:3 /log+:$logf
 if ($tod -ne $ytd) {
     Write-Output "copying TC data for $yyd"
-    robocopy \\astro2\data\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /mov /v /s /r:3 /log+: $logf
+    robocopy \\astro2\data\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /mov /v /s /r:3 /log+:$logf
 }
 net use \\astro2\data /d
 Write-Output "finished" (get-date) 
 Get-ChildItem –Path  "..\Logs" –Recurse -include *.log | Where-Object { $_.CreationTime –lt (Get-Date).AddDays(-30) } | Remove-Item
-Set-Location C:\Users\Mark\Videos\Astro\MeteorCam\scripts
+Set-Location $curdir
 exit 0
