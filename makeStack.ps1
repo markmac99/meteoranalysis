@@ -1,6 +1,10 @@
 # script to push video data to the website
 $curloc = get-location
 $fnam=$args[0]
+$minbri=$args[1]
+
+if($args.count -lt 1) {$fnam='stack.jpg'}
+if($args.count -lt 2) {$minbri=0.5}
 
 $awssite=get-content 'c:\users\mark\videos\astro\meteorcam\radio\awssite.txt'
 $usr= 'bitnami@'+$awssite
@@ -21,12 +25,12 @@ ssh -o StrictHostKeyChecking=no -i $key $usr rm -f data/meteors/tmp/*.jpg
 scp -o StrictHostKeyChecking=no -i $key *.jpg $targ
 
 write-output 'Creating stack'
-ssh -o StrictHostKeyChecking=no -i $key $usr data/meteors/tmp/makestack.sh
+ssh -o StrictHostKeyChecking=no -i $key $usr data/meteors/tmp/makestack.sh $fnam $minbri
 
-scp -o StrictHostKeyChecking=no -i $key $targ/stack.jpg .
-move-item stack.jpg ../stacks/$fnam.jpg -Force
+scp -o StrictHostKeyChecking=no -i $key $targ/$fnam ../stacks/
+#move-item stack.jpg ../stacks/$fnam.jpg -Force
 
-& 'C:\Program Files (x86)\FastStone Image Viewer\fsviewer.exe' ../stacks/$fnam.jpg
+& 'C:\Program Files (x86)\FastStone Image Viewer\fsviewer.exe' ../stacks/$fnam
 
 $del = read-host -Prompt 'Delete source files?'
 
