@@ -3,6 +3,12 @@
 Write-Output "starting" (get-date) 
 $msg = "starting " + (get-date)  
 add-content $logf $msg
+$maxage=30
+if ($argv.count  -gt 1 ) 
+{
+    $maxage=$argv[1]
+}
+
 c:
 $curdir=get-location
 set-location C:\Users\Mark\Videos\Astro\MeteorCam\UK0006
@@ -58,10 +64,16 @@ ssh -o StrictHostKeyChecking=no -i $keyf  pi@meteorpi ~/redoConfirmed.sh
 
 Write-Output "copying data" 
 add-content $logf "copying data"
-robocopy \\meteorpi\rms_share\ArchivedFiles ArchivedFiles /dcopy:DAT /tee /v /s /r:3 /log+:$logf
-robocopy \\meteorpi\rms_share\ConfirmedFiles ConfirmedFiles /dcopy:DAT /tee /v /s /r:3 /log+:$logf
+robocopy \\meteorpi\rms_share\ArchivedFiles ArchivedFiles /dcopy:DAT /tee /v /s /r:3 /log+:$logf /maxage:$maxage
+robocopy \\meteorpi\rms_share\ConfirmedFiles ConfirmedFiles /dcopy:DAT /tee /v /s /r:3 /log+:$logf /maxage:$maxage
 
 net use \\meteorpi\RMS_share /d
+
+# purge older data
+set-location C:\Users\Mark\Videos\Astro\MeteorCam\UK0006\ArchivedFiles
+$daysback="-30"
+$DatetoDelete = (get-date).AddDays($Daysback)
+Get-ChildItem  . | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | remove-item -force -recurse
 set-location $curdir
 
 & $PSScriptRoot\picamera\Get-interesting-pidata.ps1

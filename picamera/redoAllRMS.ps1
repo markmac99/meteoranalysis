@@ -20,27 +20,39 @@ $env:VS90COMNTOOLS='C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\
 
 $pwd = Get-Location
 $basedir='C:\Users\mark\Videos\astro\MeteorCam\UK0006\ConfirmedFiles'
-$dlist = (get-childitem -directory $basedir).Name
+$mindt = (get-date).AddDays(-14)
+$dlist = (Get-ChildItem  -directory $basedir | Where-Object { $_.LastWriteTime -gt $mindt }).name
 foreach ($src in $dlist)
 {
     $targ = $basedir + '\' + $src
-    $ftpfil=$targ + '\FTPdetectinfo_' + $src +'.txt'
-    $platepar = $targ + '\platepar_cmn2010.cal'
+    
+    $png=$targ+'\*.png'
+    $isdone=(get-childitem $png).Name
+    if ($isdone.count -eq 0 ){
+        $ftpfil=$targ + '\FTPdetectinfo_' + $src +'.txt'
+        $platepar = $targ + '\platepar_cmn2010.cal'
 
-    set-location 'C:\Users\mark\Documents\Projects\RMS'
-    # create the CSV file
-    python -m Utils.RMS2UFO $ftpfil $platepar
-    # create the shower association map
-    python -m Utils.ShowerAssociation $ftpfil -x
+        set-location 'C:\Users\mark\Documents\Projects\meteorhunting\RMS'
+        # create the CSV file
+        python -m Utils.RMS2UFO $ftpfil $platepar
+        # create the shower association map
+        python -m Utils.ShowerAssociation $ftpfil -x
 
-    # convert the FITS to jpegs
-    python -m Utils.BatchFFtoImage $targ jpg
-    #stack them if more than one to stack
-    $fits = $targ  + '\FF*.fits'
-    $nfits=(get-childitem $fits).count
-    if ($nfits -gt 1)
+        # convert the FITS to jpegs
+        python -m Utils.BatchFFtoImage $targ jpg
+        #stack them if more than one to stack
+        $fits = $targ  + '\FF*.fits'
+        $nfits=(get-childitem $fits).count
+        if ($nfits -gt 1)
+        {
+            python -m Utils.StackFFs $targ jpg -s  -x
+        }
+        python -m Utils.GenerateMP4s $targ 
+    }
+    else
     {
-        python -m Utils.StackFFs $targ jpg -s  -x
+        $msg= 'already processed ' + $src
+        write-output $msg
     }
 }
 set-location $pwd

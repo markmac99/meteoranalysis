@@ -3,7 +3,8 @@
 $srcpath='c:\users\mark\videos\astro\meteorcam\UK0006\'
 
 $arcpath=$srcpath + 'ConfirmedFiles\'
-$dlist = (get-childitem -directory $arcpath).Name
+$mindt = (get-date).AddDays(-14)
+$dlist = (get-childitem -directory $arcpath | where-object {$_.LastWriteTime -gt $mindt }).Name
 foreach ($dname in $dlist)
 {
     $msg = 'processing '+$dname
