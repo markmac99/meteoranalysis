@@ -34,10 +34,10 @@ if ($? -eq $false ){
 }
 
 Write-Output "copying data for $tod" 
-robocopy \\astromini\\data\meteorcam2\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+:$logf
+robocopy \\astromini\\data\meteorcam2\$tod $tod *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+:$logf /mov
 if ($tod -ne $ytd) {
     Write-Output "copying data for $ytd"
-    robocopy \\astromini\\data\meteorcam2\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+:$logf
+    robocopy \\astromini\\data\meteorcam2\$ytd $ytd *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /tee /m /v /s /r:3 /log+:$logf /mov
 }
 Set-Location $curdir
 Write-Output "finished" (get-date) 

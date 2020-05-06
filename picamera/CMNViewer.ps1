@@ -1,7 +1,7 @@
 # simple script to display the most recent CMN/RMS meteor captures
 
 set-location 'C:\users\mark\Videos\astro\MeteorCam\scripts'
-invoke-expression -Command ".\get_files-GMN1.ps1 10"
+#invoke-expression -Command ".\get_files-GMN1.ps1 10"
 set-location $PSScriptRoot
 $rootdir='C:\users\mark\Videos\astro\MeteorCam\UK0006\ArchivedFiles'
 #net use \\meteorpi\RMS_share /user:pi Wombat33rpi

@@ -27,8 +27,11 @@ foreach ($src in $dlist)
     $targ = $basedir + '\' + $src
     
     $png=$targ+'\*.png'
+    $ftp=$targ+'\FTPdetectinfo*.txt'
+
     $isdone=(get-childitem $png).Name
-    if ($isdone.count -eq 0 ){
+    $ftpexists=(get-childitem $ftp).name
+    if ($isdone.count -eq 0 -and $ftpexists.length -gt 0){
         $ftpfil=$targ + '\FTPdetectinfo_' + $src +'.txt'
         $platepar = $targ + '\platepar_cmn2010.cal'
 
