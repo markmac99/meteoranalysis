@@ -10,7 +10,8 @@ $path=(get-childitem $rootdir -directory | sort-object creationtime | select-obj
 $myf = $rootdir + '\'+$path
 #set-location 'C:\Program Files (x86)\CMN_binViewer'
 #& .\CMN_binViewer.exe $myf
-set-location \\buffalonas\mark\projects\CroatianMeteorNetwork\cmn_binviewer
+#set-location \\buffalonas\mark\projects\CroatianMeteorNetwork\cmn_binviewer
+set-location c:\users\mark\documents\projects\meteorhunting\cmn_binviewer
 conda activate binviewer
 python CMN_BinViewer.py $myf
 set-location 'C:\users\mark\Videos\astro\MeteorCam\scripts'
