@@ -25,7 +25,7 @@ $src = $targ.substring($targ.lastindexof('UK'))
 $ftpfil=$targ + '\FTPdetectinfo_' + $src +'.txt'    
 $platepar = $targ + '\platepar_cmn2010.cal'
 
-set-location 'C:\Users\mark\Documents\Projects\RMS'
+set-location 'C:\Users\mark\Documents\Projects\meteorhunting\RMS'
 # create the CSV file
 python -m Utils.RMS2UFO $ftpfil $platepar
 # create the shower association map
