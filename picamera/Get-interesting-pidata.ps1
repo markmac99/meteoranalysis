@@ -34,4 +34,6 @@ foreach ($dname in $dlist)
     copy-item $src $pth
     $src=$srcpath +'ConfirmedFiles\'+$dname +'\FF_UK0006_*.gif'
     copy-item $src $pth
+    $src=$srcpath +'ConfirmedFiles\'+$dname +'\*.mp4'
+    copy-item $src $pth
 }
