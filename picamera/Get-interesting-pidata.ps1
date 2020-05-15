@@ -1,6 +1,7 @@
 # powershell script to grab interesting files from Pi Camera analysis
 
 $srcpath='c:\users\mark\videos\astro\meteorcam\UK0006\'
+$remotepath='\\meteorpi\RMS_share\ArchivedFiles\'
 
 $arcpath=$srcpath + 'ConfirmedFiles\'
 $mindt = (get-date).AddDays(-14)
@@ -35,5 +36,7 @@ foreach ($dname in $dlist)
     $src=$srcpath +'ConfirmedFiles\'+$dname +'\FF_UK0006_*.gif'
     copy-item $src $pth
     $src=$srcpath +'ConfirmedFiles\'+$dname +'\*.mp4'
+    copy-item $src $pth
+    $src = $remotepath+$dname+'\UK*.mp4'
     copy-item $src $pth
 }
