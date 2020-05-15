@@ -1,4 +1,4 @@
-﻿$logf=  -join("..\logs\robocopy-gmn1-", (get-date -uformat "%Y%m%d-%H%M%S"),".log")
+﻿$logf=  -join("..\logs\robocopy-uk0006-", (get-date -uformat "%Y%m%d-%H%M%S"),".log")
 
 Write-Output "starting" (get-date) 
 $msg = "starting " + (get-date)  
