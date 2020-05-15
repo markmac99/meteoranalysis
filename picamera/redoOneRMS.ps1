@@ -40,4 +40,5 @@ if ($nfits -gt 1)
 {
     python -m Utils.StackFFs $targ jpg -s  -x   
 }
+python -m Utils.GenerateMP4s $targ
 set-location $pwd
