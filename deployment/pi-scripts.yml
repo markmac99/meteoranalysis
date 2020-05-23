@@ -1,0 +1,23 @@
+--- 
+- hosts: meteorpi
+  vars:
+    srcdir: /mnt/c/Users/mark/Documents/Projects/meteorhunting/UKMON-shared/Pi_Cameras 
+  tasks: 
+  - name: copy checkForMeteors
+    copy: 
+      src: /{{ srcdir}}/checkForMeteors.sh
+      dest: /home/pi/mjmm 
+      mode: 0755 
+      backup: no
+  - name: copy postProcess
+    copy: 
+      src: /{{ srcdir}}/postProcess.sh
+      dest: /home/pi/mjmm 
+      mode: 0755 
+      backup: no
+  - name: copy sendToYoutube
+    copy: 
+      src: /{{ srcdir}}/sendToYoutube.py
+      dest: /home/pi/mjmm 
+      mode: 0644
+      backup: no
