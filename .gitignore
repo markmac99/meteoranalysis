@@ -12,3 +12,4 @@ __pycache__/
 *.xlsx
 getcsvsfromftp.sh
 radio/doit.ps1
+DailyChecks
