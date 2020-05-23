@@ -10,6 +10,7 @@ nexmo-key.txt
 *.csv
 __pycache__/
 *.xlsx
+DailyChecks
+*.retry
 getcsvsfromftp.sh
 radio/doit.ps1
-DailyChecks

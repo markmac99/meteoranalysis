@@ -9,6 +9,13 @@
       dest: /home/pi/mjmm 
       mode: 0755 
       backup: no
+  - name: Replace email
+    replace: 
+      path: /home/pi/mjmm/checkForMeteors.sh
+      regexp: "youremail@here"
+      replace: "mark.jm.mcintyre@cesmail.net"
+      backup: no
+
   - name: copy postProcess
     copy: 
       src: /{{ srcdir}}/postProcess.sh
@@ -21,3 +28,35 @@
       dest: /home/pi/mjmm 
       mode: 0644
       backup: no
+
+#  - name: copy pushToWebsite
+#    copy: 
+#      src: /{{ srcdir}}/pushToWebsite.sh
+#      dest: /home/pi/mjmm 
+#      mode: 0755
+#      backup: no
+#  - name: Replace targetuser
+#    replace: 
+#      path: /home/pi/mjmm/pushToWebsite.sh
+#      regexp: "targetuser"
+#      replace: "bitnami"
+#      backup: no
+#  - name: Replace targetserver
+#    replace: 
+#      path: /home/pi/mjmm/pushToWebsite.sh
+#      regexp: "targetserver"
+#      replace: "3.9.128.14"
+#      backup: no
+#  - name: Replace targetfolder
+#    replace: 
+#      path: /home/pi/mjmm/pushToWebsite.sh
+#      regexp: "targetfolder"
+#      replace: "data/meteors"
+#      backup: no
+#  - name: Replace sshkeyfile
+#    replace: 
+#      path: /home/pi/mjmm/pushToWebsite.sh
+#      regexp: "usersshkey"
+#      replace: "~/.ssh/markskey.pem"
+#      backup: no
+
