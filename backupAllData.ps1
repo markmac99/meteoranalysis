@@ -18,7 +18,14 @@ foreach ($cam in $cl)
         $ssrc=$src+'\'+$cam+'\'+$i
         $sdest=$dest+'\'+$cam+'\'+$i 
         echo $ssrc $sdest
-        robocopy $ssrc $sdest *.csv *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /v /s /r:3
+        robocopy $ssrc $sdest *.csv *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /v /s /z /r:3
         Get-ChildItem $ssrc -Recurse | Where-Object { $_.LastWriteTime -lt $DatetoDelete } | Remove-Item -recurse
     }
+}
+$flds='archive','BatsAndBirds','Fireballs','Docs','OtherCameras','Programmes','radio','scripts','sprites','stacks','stills'
+foreach ($fld in $flds)
+{
+    $ssrc=$src+'\'+$fld
+    $sdest=$dest+'\'+$fld
+    robocopy $ssrc $sdest *.ps1 *.py *.bat *.sh *.csv *.jpg *.bmp *.txt *.xml M*.avi /dcopy:DAT /m /v /s /z /r:3
 }
