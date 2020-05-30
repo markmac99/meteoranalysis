@@ -133,7 +133,7 @@ def main() :
     # 
     # start of main function
     #   
-    targpath = 'c:\\spectrum\\rmob\\'
+    targpath = 'C:/Users/mark/Videos/astro/MeteorCam/radio/rmob/'
     srcpath='C:/Users/mark/Videos/astro/MeteorCam/radio/'
     maxdy=0 
     if len(sys.argv) > 1 :

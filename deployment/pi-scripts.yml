@@ -1,5 +1,5 @@
 --- 
-- hosts: meteorpi
+- hosts: meteorpi, meteorpi2
   vars:
     srcdir: /mnt/c/Users/mark/Documents/Projects/meteorhunting/UKMON-shared/Pi_Cameras 
   tasks: 
@@ -16,6 +16,19 @@
       replace: "mark.jm.mcintyre@cesmail.net"
       backup: no
 
+  - name: copy LatestEvents
+    copy: 
+      src: /{{ srcdir}}/latestEvents.sh
+      dest: /home/pi/mjmm 
+      mode: 0755 
+      backup: no
+  - name: Replace email 2
+    replace: 
+      path: /home/pi/mjmm/latestEvents.sh
+      regexp: "youremail@here"
+      replace: "mark.jm.mcintyre@cesmail.net"
+      backup: no
+
   - name: copy postProcess
     copy: 
       src: /{{ srcdir}}/postProcess.sh
@@ -27,6 +40,12 @@
       src: /{{ srcdir}}/sendToYoutube.py
       dest: /home/pi/mjmm 
       mode: 0644
+      backup: no
+  - name: copy logTemperature
+    copy: 
+      src: /{{ srcdir}}/logTemperature.sh
+      dest: /home/pi/mjmm 
+      mode: 0755
       backup: no
 
 #  - name: copy pushToWebsite
