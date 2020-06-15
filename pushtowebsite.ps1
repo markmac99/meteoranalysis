@@ -37,13 +37,18 @@ $targ= 'bitnami@'+$awssite+':data/meteors/ne/'
 ssh -o StrictHostKeyChecking=no -i $key $usr rm -f data/meteors/ne/*.jpg
 scp -o StrictHostKeyChecking=no -i $key c:\users\mark\videos\astro\meteorcam\temp\ne\*.jpg $targ
 
+write-output 'Collecting UK0006 data'
+set-location c:\users\mark\videos\astro\meteorcam\UK0006\$yr\$mth
+mkdir c:\users\mark\videos\astro\meteorcam\temp\UK0006 2> $NULL
+remove-item c:\users\mark\videos\astro\meteorcam\temp\UK0006\*.jpg
+$x=(get-childitem -r FF*.jpg).fullname
+for ($i=0;$i -lt $x.count ; $i++) {copy-item $x[$i] c:\users\mark\videos\astro\meteorcam\temp\UK0006 }
+
+write-output 'pushing to UK0006 folder'
+$targ= 'bitnami@'+$awssite+':data/meteors/uk0006/' 
+ssh -o StrictHostKeyChecking=no -i $key $usr rm -f data/meteors/uk0006/*.jpg
+scp -o StrictHostKeyChecking=no -i $key c:\users\mark\videos\astro\meteorcam\temp\uk0006\*.jpg $targ
 write-output 'Creating stacks'
 ssh -o StrictHostKeyChecking=no -i $key $usr data/meteors/update.sh
-
-write-output 'finding latest RMS stack'
-$targ= 'bitnami@'+$awssite+':data/meteors/' 
-$x=(get-childitem -r c:\users\mark\videos\astro\meteorcam\UK0006\ConfirmedFiles\*stack*.jpg).FullName
-copy-item $x[$x.count-1] c:\users\mark\videos\astro\meteorcam\temp\UK0006_latest.jpg
-scp -o StrictHostKeyChecking=no -i $key c:\users\mark\videos\astro\meteorcam\temp\UK0006_latest.jpg $targ
 
 set-location $curloc
