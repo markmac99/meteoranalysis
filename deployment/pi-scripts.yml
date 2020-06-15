@@ -1,81 +1,28 @@
 --- 
-- hosts: meteorpi, meteorpi2
+- hosts: meteorpi, meteorpi2, meteorpi3
   vars:
     srcdir: /mnt/c/Users/mark/Documents/Projects/meteorhunting/UKMON-shared/Pi_Cameras 
+    destdir: /home/pi/mjmm
   tasks: 
-  - name: copy checkForMeteors
-    copy: 
-      src: /{{ srcdir}}/checkForMeteors.sh
-      dest: /home/pi/mjmm 
-      mode: 0755 
-      backup: no
+  - name: Create Directory
+    file:
+      path: '{{destdir}}/eventlog'
+      state: directory
+      mode: '0755'
+
+  - name: copy files
+    copy: src={{ item.src }} dest={{ item.dest }}
+    with_items:
+      - {src: '{{srcdir}}/checkForMeteors.sh', dest: '{{destdir}}', mode=0755, backup=no }
+      - {src: '{{srcdir}}/latestEvents.sh', dest: '{{destdir}}', mode=0755, backup=no }
+      - {src: '{{srcdir}}/postProcess.sh', dest: '{{destdir}}', mode=0755, backup=no }
+      - {src: '{{srcdir}}/logTemperature.sh', dest: '{{destdir}}', mode=0755, backup=no }
+      - {src: '{{srcdir}}/sendToYoutube.py', dest: '{{destdir}}', mode=0644, backup=no  }
+      - {src: '{{srcdir}}/config.ini', dest: '{{destdir}}', mode=0644, backup=no  }
+
   - name: Replace email
     replace: 
-      path: /home/pi/mjmm/checkForMeteors.sh
+      path: '{{destdir}}/config.ini'
       regexp: "youremail@here"
-      replace: "mark.jm.mcintyre@cesmail.net"
+      replace: "markmcintyre99@googlemail.com"
       backup: no
-
-  - name: copy LatestEvents
-    copy: 
-      src: /{{ srcdir}}/latestEvents.sh
-      dest: /home/pi/mjmm 
-      mode: 0755 
-      backup: no
-  - name: Replace email 2
-    replace: 
-      path: /home/pi/mjmm/latestEvents.sh
-      regexp: "youremail@here"
-      replace: "mark.jm.mcintyre@cesmail.net"
-      backup: no
-
-  - name: copy postProcess
-    copy: 
-      src: /{{ srcdir}}/postProcess.sh
-      dest: /home/pi/mjmm 
-      mode: 0755 
-      backup: no
-  - name: copy sendToYoutube
-    copy: 
-      src: /{{ srcdir}}/sendToYoutube.py
-      dest: /home/pi/mjmm 
-      mode: 0644
-      backup: no
-  - name: copy logTemperature
-    copy: 
-      src: /{{ srcdir}}/logTemperature.sh
-      dest: /home/pi/mjmm 
-      mode: 0755
-      backup: no
-
-#  - name: copy pushToWebsite
-#    copy: 
-#      src: /{{ srcdir}}/pushToWebsite.sh
-#      dest: /home/pi/mjmm 
-#      mode: 0755
-#      backup: no
-#  - name: Replace targetuser
-#    replace: 
-#      path: /home/pi/mjmm/pushToWebsite.sh
-#      regexp: "targetuser"
-#      replace: "bitnami"
-#      backup: no
-#  - name: Replace targetserver
-#    replace: 
-#      path: /home/pi/mjmm/pushToWebsite.sh
-#      regexp: "targetserver"
-#      replace: "3.9.128.14"
-#      backup: no
-#  - name: Replace targetfolder
-#    replace: 
-#      path: /home/pi/mjmm/pushToWebsite.sh
-#      regexp: "targetfolder"
-#      replace: "data/meteors"
-#      backup: no
-#  - name: Replace sshkeyfile
-#    replace: 
-#      path: /home/pi/mjmm/pushToWebsite.sh
-#      regexp: "usersshkey"
-#      replace: "~/.ssh/markskey.pem"
-#      backup: no
-
