@@ -13,7 +13,7 @@ add-content -path tmp\runtime.log -value 'copying latest image'
 
 $awssite=get-content 'c:\spectrum\scripts\awssite.txt'
 
-$key='c:\users\meteor\documents\keys\markskey.pem'
+$key='c:\users\astro\.ssh\markskey.pem'
 $targ= 'bitnami@'+$awssite+':data/meteors' 
 scp -o StrictHostKeyChecking=no -i $key ..\latest2d.jpg $targ
 
@@ -21,6 +21,10 @@ add-content -path tmp\runtime.log -value 'copying last capture'
 $fnam=(get-childitem  c:\spectrum\screenshots\event*.jpg | sort-object lastwritetime).name | select-object -last 1
 copy-item $fnam  -destination latestcapture.jpg
 scp -o StrictHostKeyChecking=no -i $key latestcapture.jpg $targ
+
+add-content -path tmp\runtime.log -value 'updating colorgrammes'
+
+python c:\spectrum\scripts\colorgram.py
 
 add-content -path tmp\runtime.log -value 'copying colorgramme file'
 #$mmyyyy=((get-date).tostring("MMyyyy"))

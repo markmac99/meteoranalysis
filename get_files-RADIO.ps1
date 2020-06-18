@@ -23,24 +23,25 @@ Start-Transcript -path ..\logs\getradiodata.log -append
 
 write-output "starting...."
 
-net use \\radiometeor\spectrum /user:meteor Wombat33rm
-copy awssite.txt \\radiometeor\spectrum\scripts
-robocopy \\radiometeor\spectrum *.jpg *.dat eve*.txt  .  /s
-net use \\radiometeor\spectrum  /d
-net use \\radiometeor\colorgramme /user:meteor Wombat33rm
-robocopy \\radiometeor\colorgramme\rmob *.* rmob 
-robocopy \\radiometeor\colorgramme\img *.* rmob
+#net use \\radiometeor\spectrum /user:meteor Wombat33rm
+copy awssite.txt \\astro3\spectrum\scripts
+robocopy \\astro3\spectrum *.jpg *.dat eve*.txt  .  /s
+#net use \\astro3\spectrum  /d
+
+net use \\astro3\colorgramme /user:meteor Wombat33rm
+robocopy \\astro3\colorgramme\rmob *.* rmob 
+robocopy \\astro3\colorgramme\img *.* rmob
 
 # create next month's empty RMOB file, if it doesn't already exist
 $nexmth=(get-date).adddays(8).tostring("yyyyMM")
-$fname = -join("\\radiometeor\spectrum\RMOB-", $nexmth, ".DAT")
+$fname = -join("\\astro3\spectrum\RMOB-", $nexmth, ".DAT")
 if((test-path $fname) -eq $false) 
 { 
     write-output "creating empty file...."
     new-item -path $fname 
 }
 
-net use \\radiometeor\colorgramme /d
+#net use \\radiometeor\colorgramme /d
 
 # compress older files to save space
 $prvmth = (get-date).addmonths(-2) 

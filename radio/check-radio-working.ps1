@@ -9,8 +9,9 @@ while($true)
 {
     $dt =get-date -uformat '%Y%m%d'
     $logf='c:\spectrum\logs\check-'+$dt+'.log'
-    $ftocheck='event_log'+$dt+'.txt'
+    $ftocheck='c:\spectrum\event_log'+$dt+'.txt'
     $now = get-date -uformat '%H:%M:%S'
+    write-output "checking at $now..."
     write-output "checking at $now..." >> $logf
     if ((get-item $ftocheck).lastwritetime -lt  (get-date).addhours($offset)) 
     { 
@@ -24,7 +25,7 @@ while($true)
             Send-MailMessage -from radiometeor@rm -to mark@localhost -subject "Radio down" -body $msg -smtpserver 192.168.1.151    
             $id=(Get-Process SDRSharp).id
             stop-process $id
-            sleep(10)
+            start-sleep(10)
             & scripts\runSDRSharp.exe
         }
     } 

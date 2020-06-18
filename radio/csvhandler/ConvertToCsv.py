@@ -15,10 +15,8 @@ lat=51.8831
 lng=-1.30616
 alt=80
 tz=0
-targpath = 'C:/Users/mark/Videos/astro/MeteorCam/radio/archive/'
-srcpath='C:/Users/mark/Videos/astro/MeteorCam/radio/'
 
-def doafile (yr, mt, dy):
+def doafile (yr, mt, dy, srcpath, targpath):
     print('processing ' + yr+mt+dy)
     #dt = "{:4d}{:02d}{:02d}".format(yr,mt,dy)
     dt = yr+mt+dy
@@ -56,7 +54,7 @@ def main():
     yr=sys.argv[1] #'2020'
     mt=sys.argv[2] #'02'
     dy=sys.argv[3] #'10'
-    doafile(yr, mt, dy)
+    doafile(yr, mt, dy, 'c:/spectrum', 'c:/spectrum/csv/')
 
 if __name__ == '__main__':
         main()

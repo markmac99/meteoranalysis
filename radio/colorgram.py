@@ -6,9 +6,9 @@ import pandas as pd
 from datetime import date
 import calendar
 import csv
-import os, sys
+import os, sys, shutil
 import dateutil.relativedelta 
-from radio import ConvertToCsv
+from csvhandler import ConvertToCsv
 
 def heatmap(data, row_labels, col_labels, ax=None,
             cbar_kw={}, cbarlabel="", **kwargs):
@@ -133,8 +133,8 @@ def main() :
     # 
     # start of main function
     #   
-    targpath = 'C:/Users/mark/Videos/astro/MeteorCam/radio/rmob/'
-    srcpath='C:/Users/mark/Videos/astro/MeteorCam/radio/'
+    targpath = 'c:/spectrum/rmob/'
+    srcpath='c:/spectrum/'
     maxdy=0 
     if len(sys.argv) > 1 :
         tod = str(sys.argv[1])
@@ -178,7 +178,7 @@ def main() :
         row_lbl=["1","","","","5","","","","","10",
             "","","","","15","","","","","20","","","","","25","","",""]
 
-    im, cbar = heatmap(myarray, col_lbl, row_lbl,
+    im, _ = heatmap(myarray, col_lbl, row_lbl,
                     cmap="jet", cbarlabel="Meteors/hour")
     texts = annotate_heatmap(im, valfmt=" {x:.0f} ", fontsize=8, threshold=myarray.max()*3/4)
     fig.tight_layout()
@@ -231,13 +231,11 @@ def main() :
     #plt.show()
 
     fname3 = targpath + 'RMOB_'+str(yyyy)+dys+'.jpg'
+    latfil = targpath + 'RMOB_latest.jpg'
     plt.savefig(fname3, dpi=300,bbox_inches='tight')
     plt.close()
 
-    os.system('net use \\\\radiometeor\\spectrum /user:meteor Wombat33rm')
-    os.system('copy %s \\\\radiometeor\\spectrum\\rmob\\RMOB_latest.jpg' % (fname3))
-    os.system('net use \\\\radiometeor\\spectrum /d')
-
+    shutil.copy(fname3, latfil)
 
     mthcnts=myarray.flatten()
     hrs=range(1,len(mthcnts)+1) 
@@ -337,7 +335,7 @@ def main() :
 
     yr=yyyy[0:4]
     mt=yyyy[4:6]
-    ConvertToCsv.doafile(yr,mt,dys)
+    ConvertToCsv.doafile(yr,mt,dys, srcpath, srcpath+'/csv/')
 
 if __name__ == '__main__':
     main()
