@@ -144,7 +144,6 @@ def main(srcpath, targpath, tod) :
     except:
         print('dir exists')
 
-    maxdy=0 
     # create heatmap for this month
     # named yyyymm.jpg eg 200206.jpg
     mthdays=calendar.monthrange(int(tod[:4]), int(tod[5:6]))[1]
@@ -163,7 +162,6 @@ def main(srcpath, targpath, tod) :
             #print(f'\t year {yyyy} day {dy} hour {row[1]} value {row[2]}')
             myarray[hr,dy-1]=val
             line_count += 1
-            maxdy=dy        
         print(f'Processed {line_count} lines.')
     hrs=range(1,25)
     cnts=myarray[:,dy-1]
@@ -271,7 +269,6 @@ def main(srcpath, targpath, tod) :
 
     # generate three-month heatmap
     #
-    maxdy=0 
     tod=date.today().strftime("%Y%m")
     mthdays=calendar.monthrange(date.today().year,date.today().month)[1]
     #m1=mthdays
@@ -296,7 +293,6 @@ def main(srcpath, targpath, tod) :
             val  = int(row[2])
             myarray[hr,dy-1]=val
             line_count += 1
-            maxdy=dy        
         print(f'Processed {line_count} lines.')
 
     with open(srcpath +'RMOB-'+d2.strftime("%Y%m")+'.DAT') as myfile:
@@ -310,7 +306,6 @@ def main(srcpath, targpath, tod) :
             val  = int(row[2])
             myarray[hr,dy-1]=val
             line_count += 1
-            maxdy=dy        
         print(f'Processed {line_count} lines.')
 
     with open(srcpath +'RMOB-'+tod+'.DAT') as myfile:
@@ -324,12 +319,10 @@ def main(srcpath, targpath, tod) :
             val  = int(row[2])
             myarray[hr,dy-1]=val
             line_count += 1
-            maxdy=dy        
         print(f'Processed {line_count} lines.')
     hrs=range(1,25)
     cnts=myarray[:,dy-1]
 
-    #print (maxdy)
     fig, ax = plt.subplots()
 
     row_lbl= ["" for x in range(mthdays)]
