@@ -7,8 +7,6 @@ invoke-expression -Command .\get_files-UK0006.ps1
 set-location $PSScriptRoot
 invoke-expression -Command .\get_files-RADIO.ps1
 set-location $PSScriptRoot
-invoke-expression -command .\create-colorgram.bat
-set-location $PSScriptRoot
 if ((get-date).hour -eq 8 ) {invoke-expression -command .\ukmon-archive\get-archive.ps1}
 set-location $PSScriptRoot
 if ((get-date).hour -eq 20 ) {invoke-expression -command .\pushtowebsite.ps1}
