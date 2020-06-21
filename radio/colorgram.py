@@ -347,7 +347,8 @@ def main(srcpath, targpath, tod) :
     fname2 = targpath + str(yyyy)+'-3mths.jpg'
     plt.savefig(fname2, dpi=300,bbox_inches='tight')
     plt.close()
-    shutil.copy(fname2, '3months-latest.jpg')
+    latfname=targpath +'3months_latest.jpg'
+    shutil.copy(fname2, latfname)
 
 
     # create CSV versions of the above suitable for UKMON

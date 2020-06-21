@@ -54,7 +54,9 @@ def main():
     yr=sys.argv[1] #'2020'
     mt=sys.argv[2] #'02'
     dy=sys.argv[3] #'10'
-    doafile(yr, mt, dy, 'c:/spectrum', 'c:/spectrum/csv/')
+    srcpath=sys.argv[4] 
+    destpath=sys.argv[4]+'/csv/'
+    doafile(yr, mt, dy, srcpath, destpath)
 
 if __name__ == '__main__':
         main()
