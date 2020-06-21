@@ -32,6 +32,17 @@ copy-item 'C:\Spectrum\rmob\RMOB_latest.jpg' -destination .
 $fnam='RMOB_latest.jpg'
 scp -o StrictHostKeyChecking=no -i $key $fnam $targ
 
+copy-item 'C:\Spectrum\rmob\3months_latest.jpg' -destination .
+$fnam='3months_latest.jpg'
+scp -o StrictHostKeyChecking=no -i $key $fnam $targ
+
+# push CSVs to AWS
+$keyfile='c:/spectrum/scripts/ukmon-shared.csv'
+$keys=((Get-Content $keyfile)[1]).split(',')
+$Env:AWS_ACCESS_KEY_ID = $keys[0]
+$env:AWS_SECRET_ACCESS_KEY = $keys[1]
+aws s3 sync c:\spectrum\csv\ s3://ukmon-shared/archive/Tackley/Radio/
+
 $msg=get-date
 add-content -path tmp\runtime.log -value $msg
 set-location $curloc
