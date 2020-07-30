@@ -37,6 +37,7 @@ for ($i=0;$i -lt $cams.count; $i++)
     add-content $logf "copying data"
     robocopy \\$pi\rms_share\ArchivedFiles ArchivedFiles /dcopy:DAT /tee /v /s /r:3 /log+:$logf /maxage:$maxage
 #    robocopy \\$pi\rms_share\ConfirmedFiles ConfirmedFiles /dcopy:DAT /tee /v /s /r:3 /log+:$logf /maxage:$maxage
+    robocopy \\$pi\rms_share\logs logs log*.log /dcopy:DAT /tee /v /s /r:3 /log+:$logf /maxage:$maxage
     set-location $curdir
     & $PSScriptRoot\DailyChecks\reorgByYMD.ps1 $cam
 }

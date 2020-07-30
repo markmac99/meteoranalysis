@@ -21,7 +21,7 @@ write-output "copying files" >> $logf
 
 net use \\astro3\spectrum /user:dataxfer Wombat33dx   
 if ($? -ne "True")  {
-    Send-MailMessage -from astro2@observatory -to mark@localhost -subject "Astro3: Unable co connect" -body "unable to connect to astro2" -smtpserver 192.168.1.151    
+    Send-MailMessage -from radio@observatory -to mark@localhost -subject "Radio: Unable co connect" -body "unable to connect to radio detector" -smtpserver 192.168.1.151    
     Add-Content $logf "net-use failed`n"
     exit 2
 } 
